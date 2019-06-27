@@ -45,20 +45,24 @@ module.exports={
             "sub_button":[
                 {
                     "type":"view",
+                    "name":"人才招聘",
+                    "url":"http://www.soso.com/"
+                },
+                {
+                    "type":"view",
                     "name":"微信报修",
                     "url":"http://www.soso.com/"
                 },
                 {
-                    "type":"miniprogram",
-                    "name":"投诉与建议",
-                    "url":"http://mp.weixin.qq.com",
-                    "appid":"wx286b93c14bbf93aa",
-                    "pagepath":"pages/lunar/index"
+                    "type":"view",
+                    "name":"微信报修",
+                    "url":"http://www.soso.com/"
+
                 },
                 {
-                    "type":"click",
-                    "name":"联系我们",
-                    "key":"V1001_GOOD"
+                    "type":"view",
+                    "name":"微信报修",
+                    "url":"http://www.soso.com/"
                 }]
         }]
 };

@@ -33,7 +33,6 @@ module.exports= ()=> {
                 /*简单的回复消息*/
                 const options=replay(message);
                 const replayMessage=template(options);
-                console.log(replayMessage)
                 res.send(replayMessage)
                 res.end("");
             } else {

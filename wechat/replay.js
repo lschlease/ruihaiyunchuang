@@ -8,8 +8,8 @@ module.exports=(message)=> {
         fromUserName: message.ToUserName,
         createTime: Date.now(),
         msgType: message.MsgType
-    }
-    let content = "什么也没有"
+    };
+    let content = "什么也没有";
     if (message.MsgType === "text") {
 
         if (message.Content === "123") {
@@ -30,7 +30,6 @@ module.exports=(message)=> {
         options.mediaId = message.MedidId;
     }
     else if (message.MsgType === "location") {
-
     }
     else if (message.MsgType === "event") {
 
@@ -59,4 +58,7 @@ module.exports=(message)=> {
         options.content = content;
         return options;
     }
+
+    options.content=content
+    return options
 };

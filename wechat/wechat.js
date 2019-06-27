@@ -34,10 +34,11 @@ const {AppID, AppSecret} = require("../config");
 const menu=require("./menu")
 
 class Wechat {
+
     constructor() {
 
     }
-
+    //获取临时凭据access_token
     getAccessToken() {
         const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${AppID}&secret=${AppSecret}`;
         return new Promise((resolve, reject) => {
@@ -136,6 +137,105 @@ class Wechat {
                 return Promise.resolve(res)
             })
     }
+
+
+    //获取jsapi_ticket
+    getTicket() {
+
+        return new Promise(async (resolve, reject) => {
+            const data = await this.fetchAccessToken();
+            const url = `https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${data.access_token }&type=jsapi`;
+            rp({method: "get", url, json: true})
+                .then(res => {
+                    //将Promise对象改成成功的状态
+                    resolve({ticket:res.ticket,
+                             expires_in:Date.now() + (res.expires_in - 300) * 1000
+                    })
+                })
+                .catch(err => {
+                    rejcet("getTicket方法出了问题" + err)
+                })
+        })
+    }
+
+    saveTicket(ticket) {
+        ticket = JSON.stringify(ticket);
+        return new Promise((resolve, reject) => {
+
+            writeFile("./ticket.txt", ticket, err => {
+
+                if (!err) {
+                    resolve();
+                } else {
+                    reject("saveTicket方法出了问题" + err);
+                }
+            })
+        })
+    }
+
+    readTicket() {
+
+        return new Promise((resolve, reject) => {
+
+            readFile("./ticket.txt", (err, data) => {
+
+                if (!err) {
+                    data = JSON.parse(data);
+                    resolve(data);
+                } else {
+                    reject("readTicket方法出了问题" + err);
+                }
+
+            })
+        })
+    }
+
+    isValidTicket(data) {
+        //检测传入的参数是否是有效的
+
+        if (!data && !data.ticket && !data.expires_in) {
+            return false
+        }
+        return data.expires_in > Date.now() //返回布尔值
+
+    }
+
+    //用来获取一个没有过期的 access_token
+    fetchTicket() {
+        if (this.ticket && this.ticket_expires_in && this.isValidTicket(this)) {
+            return Promise.resolve({
+                ticket: this.ticket,
+                expires_in: this.expires_in
+            })
+        }
+        return this.readTicket()
+            .then(async res => {
+                // 本地有文件
+                //判断是否过期
+                if (this.isValidTicket(res)) {
+                    //有效的
+                    return Promise.resolve(res)
+                } else {
+                    const res = await this.getTicket()
+                    await this.saveTicket(res)
+                    return Promise.resolve(res)
+                }
+            })
+            .catch(async err => {
+                //本地没有文件
+                //发送请求获取accesstoken
+                const res = await this.getTicket()
+                await this.saveTicket(res)
+                return Promise.resolve(res)
+            })
+            .then(res => {
+                this.ticket = res.ticket;
+                this.ticket_expires_in = res.expires_in;
+                return Promise.resolve(res)
+            })
+    }
+
+
      //创建自定义菜单
     createMenu(menu) {
         try {
@@ -171,15 +271,17 @@ class Wechat {
 }
 
 
-(async ()=>{
+/*(async ()=>{
     const w=new Wechat();
     let result=await w.deleteMenue();
     console.log(result);
     result=await w.createMenu(menu);
     console.log(result)
-})()
+    const data=await w.fetchTicket()
+    console.log(data)
+})()*/
 
-
+module.exports=Wechat
 
 
 
