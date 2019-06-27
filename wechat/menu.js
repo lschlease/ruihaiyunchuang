@@ -1,0 +1,64 @@
+/*自定义菜单*/
+
+module.exports={
+
+    "button":[
+        {
+            "name":"睿海云创",
+            "sub_button":[
+                {
+                    "type":"view",
+                    "name":"了解我们",
+                    "url":"http://www.soso.com/"
+                },
+                {
+                    "type":"view",
+                    "name":"在线课堂",
+                    "url":"http://www.soso.com/"
+                },
+                {
+                    "type":"view",
+                    "name":"最新动态",
+                    "url":"http://www.soso.com/"
+                },
+            ]
+        },
+        {
+            "type":"click",
+            "name":"自助查询",
+            "key":"V1001_TODAY_MUSIC",
+            "sub_button":[
+                {
+                    "type":"view",
+                    "name":"下载区",
+                    "url":"http://www.soso.com/"
+                },
+                {
+                    "type":"view",
+                    "name":"产品区",
+                    "url":"http://www.soso.com/"
+                },
+            ]
+        },
+        {
+            "name":"服务",
+            "sub_button":[
+                {
+                    "type":"view",
+                    "name":"微信报修",
+                    "url":"http://www.soso.com/"
+                },
+                {
+                    "type":"miniprogram",
+                    "name":"投诉与建议",
+                    "url":"http://mp.weixin.qq.com",
+                    "appid":"wx286b93c14bbf93aa",
+                    "pagepath":"pages/lunar/index"
+                },
+                {
+                    "type":"click",
+                    "name":"联系我们",
+                    "key":"V1001_GOOD"
+                }]
+        }]
+};
